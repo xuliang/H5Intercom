@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <input type="text" id="message">
+    <div id="msgBox"></div>
+
+    <input type="button" onclick="sendText()" value="发送信息">
+
+    <script>
+
+        var ws = '';
+
+        window.onload = function () {
+            connect();
+        }
+
+        function connect() {
+            var address = "ws://127.0.0.1:8080/websocket";
+            //address = "wss://127.0.0.1:8080/websocket";
+            ws = new WebSocket(address);
+
+            ws.onopen = function (e) {
+
+            };
+
+            //收到信息时
+            ws.onmessage = function (e) {
+                var Html = '<p>' + e.data + '</p>';
+                document.getElementById("msgBox").innerHTML += Html;
+            };
+
+            //发生错误时
+            ws.onerror = function (e) {
+
+            };
+
+            //连接关闭时
+            ws.onclose = function (e) {
+                document.getElementById("msgBox").innerHTML += "<p>与服务器的连接已断开。</p>";
+            };
+
+        }
+
+        function sendText() {
+            ws.send(document.getElementById("message").value);
+        }
+
+    </script>
+
+</body>
+
+</html>
